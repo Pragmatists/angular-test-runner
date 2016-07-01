@@ -93,7 +93,7 @@ function app(modules){
           return function($el){
             var x = $el.find(selector);
             x.toString = function(){
-              return '[\n\t' + x[0].outerHTML + '\n]';
+              return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
             };
             var actual = expect(x);
             var matcher = actual[fn.name];
