@@ -1,0 +1,72 @@
+describe('app', function(){
+  
+//  beforeEach(module('scotchTodo'));
+  
+  it('starts', function(done){
+    
+//    var $el = $(getCompiledElement());
+    
+    var app = run('public/app.html');
+    
+    app
+      .when(function() {
+        console.log('when');
+      })
+      .then(done);
+    
+//    console.log($el);
+    
+//    $('input[type=text]').val('New Item');
+//    $('button[type=submit]').click();
+    
+//    var items = $el.find('#todo-list > label');
+//    items = _.map(items, function(e) { return $(e).text(); });
+//    expect(items).toEqual(['Hello']);
+  });
+  
+  function run(htmlFile){
+    
+    var element = $('<div ng-app="test-app"><div test-app/></div>'), callback = _.identity, done;
+    
+    angular.module('test-app', [ htmlFile, 'scotchTodo' ])
+      .directive('testApp', function(){
+      return {
+          restrict: 'A',
+          templateUrl: htmlFile
+      };
+    });
+
+    var compile, scope;
+
+//    angular
+//      .bootstrap(function($compile, $rootScope){
+//        console.log('staring!!!!!!!!!!!!!!!');
+//        compile = $compile;
+//        scope = $rootScope.$new();
+//        element = angular.element('<div ng-app="test-app"><div test-app></div></div>');
+//        var compiledElement = compile(element)(scope);
+//        scope.$digest();
+//        console.log('staring');
+//        callback();
+//        done();
+//    });
+    
+    angular.bootstrap(element, [ 'test-app' ]);
+    
+    console.log('element', element);
+    
+    return {
+      find: function(selector){
+        return $(element).find(selector);
+      },
+      when: function(c){
+        callback = c;
+        return this;
+      },
+      then: function(d){
+        done = d;
+      }
+    };
+  }
+  
+});

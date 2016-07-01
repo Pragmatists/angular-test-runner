@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html>
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Node/Angular Todo App</title>
+
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css">
+	<style>
+		html 					{ overflow-y:scroll; }
+		body 					{ padding-top:50px; }
+		#todo-list 				{ margin-bottom:30px; }
+		#todo-form 	 			{ margin-bottom:50px; }
+	</style>
+
+	<script src="/node_modules/angular/angular.min.js"></script>
+
+	<script src="js/controllers/main.js"></script>
+	<script src="js/services/todos.js"></script>
+	<script src="js/todo-item.js"></script>
+	<script src="js/core.js"></script>
+
+</head>
+<body ng-app="scotchTodo">
+  <div ng-include="'app.html'"></div>
+</body>
+</html>
