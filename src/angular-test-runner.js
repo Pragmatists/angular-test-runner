@@ -1,7 +1,4 @@
-window.test = {
-  app: app
-};
-
+module.exports = app;
 
 function app(modules){
 
@@ -99,7 +96,6 @@ function app(modules){
             var actual = expect(x);
             var matcher = actual[fn.name];
             var result = matcher.apply(actual, args);
-            console.log(result);
           };
         };
       });
@@ -107,9 +103,9 @@ function app(modules){
     return perform;
   }
 
-  window.click = withIn(click);
-  window.type = type;
-  window.expectThat = expectThat;
+  global.click = withIn(click);
+  global.type = type;
+  global.expectThat = expectThat;
 
   
 })();

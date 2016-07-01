@@ -6,11 +6,8 @@ module.exports = function(config) {
             'node_modules/lodash/lodash.js',
             'node_modules/jquery/dist/jquery.js',
             'node_modules/angular/angular.min.js',
-//            'node_modules/angular-mocks/angular-mocks.js',
-            'public/**/*.js',
-            'test/**/*.js',
-            'public/*.html',
-            'public/**/*.html'
+            'angular-test-runner.js',
+            'test/**/*.js'
         ],
         exclude: [
         ],
@@ -24,6 +21,5 @@ module.exports = function(config) {
         autoWatch: true,
         singleRun: false,
         browsers: ['PhantomJS']
-//        browsers: ['Chrome']
     });
 };

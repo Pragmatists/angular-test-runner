@@ -1,5 +1,4 @@
-
-window.http = http;
+module.exports = http;
 
 function http(){
 
