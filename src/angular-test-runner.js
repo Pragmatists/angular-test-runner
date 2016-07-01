@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = app;
 
 function app(modules){
