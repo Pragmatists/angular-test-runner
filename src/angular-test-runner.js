@@ -23,7 +23,7 @@ function app(modules){
         var d = {
           restrict: 'A',
           link: function($scope) {
-            _.merge($scope, scope);
+            _.assign($scope, scope);
           }
         };
         if(isUrl){
