@@ -16486,7 +16486,9 @@ function app(modules){
 
   function expectThat(selector){
     
-    var perform = {};
+    var perform = {
+      not: {}
+    };
   
     var jasmine = expect('');
     
@@ -16506,6 +16508,18 @@ function app(modules){
               return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
             };
             var actual = expect(x);
+            var matcher = actual[fn.name];
+            var result = matcher.apply(actual, args);
+          };
+        };
+        perform.not[fn.name] = function(){
+          var args = _.toArray(arguments);
+          return function($el){
+            var x = $el.find(selector);
+            x.toString = function(){
+              return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
+            };
+            var actual = expect(x).not;
             var matcher = actual[fn.name];
             var result = matcher.apply(actual, args);
           };
