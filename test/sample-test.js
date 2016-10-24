@@ -58,7 +58,7 @@ describe('sample test', function(){
     
   });
 
-    it('greets person', function(){
+  it('greets person', function(){
     
     // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});

@@ -21,10 +21,7 @@ function app(modules){
     angular.module('test-app', modulesToLoad)
       .directive('testApp', function(){
         var d = {
-          restrict: 'A',
-          link: function($scope) {
-            _.assign($scope, scope);
-          }
+          restrict: 'A'
         };
         if(isUrl){
           d.templateUrl = html;
@@ -32,7 +29,10 @@ function app(modules){
           d.template = html;
         }
         return d;
-    });
+      })
+      .run(function($rootScope){
+        _.assign($rootScope, scope);
+      });
 
     var compile, scope;
 
@@ -48,6 +48,8 @@ function app(modules){
         var callback = arguments[i];
         callback(element);
       }
+      var scope = angular.element(element).scope();
+      scope.$apply();  
     }
   }
 
@@ -60,6 +62,10 @@ function app(modules){
       $el.val(text);
       $el.change();
     });
+  }
+  function apply($el) {
+      var scope = angular.element($el).scope();
+      scope.$apply();
   }
   function click($el) {
     $el.click();
@@ -121,6 +127,7 @@ function app(modules){
 
   global.click = withIn(click);
   global.type = type;
+  global.apply = apply;
   global.expectThat = expectThat;
 
   
