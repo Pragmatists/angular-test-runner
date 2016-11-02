@@ -63,6 +63,21 @@ function app(modules){
       $el.change();
     });
   }
+  function keypress(key) {
+    return withIn(function($el){
+      $el.trigger(jQuery.Event('keypress', { keycode: key, which: key }));
+    });
+  }
+  function keydown(key) {
+    return withIn(function($el){
+      $el.trigger(jQuery.Event('keydown', { keycode: key, which: key }));
+    });
+  }
+  function keyup(key) {
+    return withIn(function($el){
+      $el.trigger(jQuery.Event('keyup', { keycode: key, which: key }));
+    });
+  }
   function apply($el) {
       var scope = angular.element($el).scope();
       scope.$apply();
@@ -127,6 +142,9 @@ function app(modules){
 
   global.click = withIn(click);
   global.type = type;
+  global.keypress = keypress;
+  global.keyup = keyup;
+  global.keydown = keydown;
   global.apply = apply;
   global.expectThat = expectThat;
 
