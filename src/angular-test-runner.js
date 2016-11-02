@@ -65,17 +65,17 @@ function app(modules){
   }
   function keypress(key) {
     return withIn(function($el){
-      $el.trigger(jQuery.Event('keypress', { keycode: key, which: key }));
+      $el.trigger(jQuery.Event('keypress', { keyCode: key, which: key }));
     });
   }
   function keydown(key) {
     return withIn(function($el){
-      $el.trigger(jQuery.Event('keydown', { keycode: key, which: key }));
+      $el.trigger(jQuery.Event('keydown', { keyCode: key, which: key }));
     });
   }
   function keyup(key) {
     return withIn(function($el){
-      $el.trigger(jQuery.Event('keyup', { keycode: key, which: key }));
+      $el.trigger(jQuery.Event('keyup', { keyCode: key, which: key }));
     });
   }
   function apply($el) {
