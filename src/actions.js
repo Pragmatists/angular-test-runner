@@ -1,3 +1,5 @@
+var jQuery = require('jquery');
+
 function type(text) {
     return withIn(function ($el) {
         $el.val(text);

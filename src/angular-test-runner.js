@@ -11,7 +11,7 @@ function app(modules){
   
   function run(html, scope, isUrl){
     
-    var element = $('<div ng-app="test-app"><div test-app/></div>');
+    var element = angular.element('<div ng-app="test-app"><div test-app/></div>');
 
     var modulesToLoad = modules;
     if(isUrl){
@@ -49,7 +49,7 @@ function app(modules){
         callback(element);
       }
       var scope = angular.element(element).scope();
-      scope.$apply();  
+      scope.$apply();
     }
   }
 

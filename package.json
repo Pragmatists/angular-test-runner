@@ -5,20 +5,20 @@
   "main": "angular-test-runner.js",
   "scripts": {
     "test": "karma start karma.conf.js",
-    "dist": "browserify src/*.js -o angular-test-runner.js"
+    "dist": "browserify src/export.js --standalone testRunner -o angular-test-runner.js"
   },
   "dependencies": {
     "angular": "^1.5.6",
     "body-parser": "^1.4.3",
     "bootstrap": "^3.3.6",
     "lodash": "^4.13.1",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "jquery": "^2.2.4"
   },
   "devDependencies": {
     "browserify": "^13.0.1",
     "jasmine-core": "^2.4.1",
     "jasmine-jquery": "^2.1.1",
-    "jquery": "^2.2.4",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-html2js-preprocessor": "^1.0.0",
