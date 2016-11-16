@@ -24,11 +24,14 @@ describe('sample test', function(){
     });
 
   var server, app;
+  var type = testRunner.actions.type;
+  var click = testRunner.actions.click;
+  var expect = testRunner.actions.expectElement;
 
   beforeEach(function(){
-    
-    app = test.app(['greeting-app']);
-    server = test.http();
+
+    app = testRunner.app(['greeting-app']);
+    server = testRunner.http();
   });
 
   afterEach(function () {
@@ -53,7 +56,7 @@ describe('sample test', function(){
     
     // then:
     html.verify(
-      expectThat('input.name').toHaveValue('John')
+        expect('input.name').toHaveValue('John')
     );
     
   });
@@ -65,13 +68,13 @@ describe('sample test', function(){
       
     // when:
     html.perform(
-      type('Jane').in('input.name'),
-      click.in('button')
-    )
+        type('Jane').in('input.name'),
+        click.in('button')
+    );
     
     // then:
     html.verify(
-      expectThat('.greeting').toContainText('Hello Jane!')
+        expect('.greeting').toContainText('Hello Jane!')
     );
     
   });
