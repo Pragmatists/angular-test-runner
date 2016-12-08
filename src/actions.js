@@ -26,7 +26,7 @@ function apply($el) {
     scope.$apply();
 }
 function click($el) {
-    $el.click().trigger('click');
+    $el.click();
 }
 function wait(timeout) {
     return function(){

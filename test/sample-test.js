@@ -15,7 +15,6 @@ describe('sample test', function(){
         controllerAs: 'vm',
         controller: function($http, $scope, $timeout){
           this.sayHello = function(){
-
             $http.post('/greeting', { name: $scope.name })
               .then(function(response){
                 var json = response.data;
