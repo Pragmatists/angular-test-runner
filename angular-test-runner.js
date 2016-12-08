@@ -26926,11 +26926,11 @@ function wait(timeout) {
 
 function navigateTo(url){
     return withAfter(function($el){
-        jQuery
+        angular
             .element('<a href="' + url + '"></a>')
             .appendTo($el)
             .click()
-            .detach();
+            .remove();
     });
 }
 
@@ -27100,12 +27100,6 @@ function app(modules){
       if(wasEmpty){
         execute();
       }
-//      for(var i=0; i<arguments.length; i++){
-//        var callback = arguments[i];
-//        callback(element);
-//      }
-//      var scope = angular.element(element).scope();
-//      scope.$apply();
     }
   }
 

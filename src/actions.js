@@ -40,11 +40,11 @@ function wait(timeout) {
 
 function navigateTo(url){
     return withAfter(function($el){
-        jQuery
+        angular
             .element('<a href="' + url + '"></a>')
             .appendTo($el)
             .click()
-            .detach();
+            .remove();
     });
 }
 
