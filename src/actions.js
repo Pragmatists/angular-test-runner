@@ -26,13 +26,50 @@ function apply($el) {
     scope.$apply();
 }
 function click($el) {
-    $el.click();
+    $el.click().trigger('click');
+}
+function wait(timeout) {
+    return function(){
+        return {
+            then: function(callback){
+                setTimeout(callback, timeout || 0);
+            }
+        };
+    };
+}
+
+function navigateTo(url){
+    return withAfter(function($el){
+        jQuery
+            .element('<a href="' + url + '"></a>')
+            .appendTo($el)
+            .click()
+            .detach();
+    });
 }
 
 function withIn(fn) {
     fn.in = function (selector) {
-        return function ($el) {
+        return withAfter(function ($el) {
             fn($el.find(selector));
+        });
+    };
+    return withAfter(fn);
+}
+function withAfter(fn) {
+    fn.after = function (timeout) {
+        return function ($el) {
+            var callback = _.noop;
+            setTimeout(function(){
+                fn($el);
+                callback();
+            }, timeout);
+            
+            return {
+                then: function(cb){
+                    callback = cb;
+                }
+            }
         };
     };
     return fn;
@@ -56,7 +93,7 @@ function expectElement(selector) {
         .forEach(function (fn) {
             perform[fn.name] = function () {
                 var args = _.toArray(arguments);
-                return function ($el) {
+                return withAfter(function ($el) {
                     var x = $el.find(selector);
                     x.toString = function () {
                         return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
@@ -64,11 +101,11 @@ function expectElement(selector) {
                     var actual = expect(x);
                     var matcher = actual[fn.name];
                     var result = matcher.apply(actual, args);
-                };
+                });
             };
             perform.not[fn.name] = function () {
                 var args = _.toArray(arguments);
-                return function ($el) {
+                return withAfter(function ($el) {
                     var x = $el.find(selector);
                     x.toString = function () {
                         return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
@@ -76,7 +113,7 @@ function expectElement(selector) {
                     var actual = expect(x).not;
                     var matcher = actual[fn.name];
                     var result = matcher.apply(actual, args);
-                };
+                });
             };
         });
 
@@ -85,10 +122,12 @@ function expectElement(selector) {
 
 module.exports = {
     click : withIn(click),
+    wait: wait,
     type : type,
     keypress : keypress,
     keyup : keyup,
     keydown : keydown,
+    navigateTo: navigateTo,
     apply : apply,
     expectElement : expectElement
 };

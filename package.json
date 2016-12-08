@@ -8,12 +8,11 @@
     "dist": "browserify src/export.js --standalone testRunner -o angular-test-runner.js"
   },
   "dependencies": {
-    "angular": "^1.5.6",
+    "angular": "1.6.0",
     "body-parser": "^1.4.3",
-    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.4",
     "lodash": "^4.13.1",
-    "sinon": "^1.17.4",
-    "jquery": "^2.2.4"
+    "sinon": "^1.17.4"
   },
   "devDependencies": {
     "browserify": "^13.0.1",

@@ -34,7 +34,7 @@ function app(modules){
         _.assign($rootScope, scope);
       });
 
-    var compile, scope;
+    var compile, scope, actions = [];
 
     angular.bootstrap(element, [ 'test-app' ]);
     
@@ -43,13 +43,47 @@ function app(modules){
       verify: perform
     };
 
-    function perform(){
-      for(var i=0; i<arguments.length; i++){
-        var callback = arguments[i];
-        callback(element);
+    function execute(){
+      var action = actions.shift();
+    
+      if(!action){
+        var scope = angular.element(element).scope();
+        scope.$apply();
+        return;
       }
-      var scope = angular.element(element).scope();
-      scope.$apply();
+        
+      var result = action(element);
+      if(isPromise(result)){
+        result.then(execute);      
+      } else {
+        execute();
+      }
+    }
+      
+    function isPromise(promise){
+      return promise && typeof promise.then == 'function';
+    }
+    function push(action){
+        actions.push(action);
+    }
+      
+    function perform(){
+
+      var wasEmpty = !actions.length;
+        
+      _([arguments])
+        .flattenDeep()
+        .each(push);
+        
+      if(wasEmpty){
+        execute();
+      }
+//      for(var i=0; i<arguments.length; i++){
+//        var callback = arguments[i];
+//        callback(element);
+//      }
+//      var scope = angular.element(element).scope();
+//      scope.$apply();
     }
   }
 

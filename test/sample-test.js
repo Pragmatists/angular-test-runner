@@ -5,20 +5,27 @@ describe('sample test', function(){
       return {
         template: ['<form ng-submit="vm.sayHello()">',
                     '<input class="name" type=text ng-model="name">',
-                    '<button type="submit">Say Hello</button>',
+                    '<button id="hello" type="submit">Say Hello</button>',
+                    '<button id="goodbye" ng-click="vm.sayGoodbye()">Say Goodbye</button>',
                     '<span class="greeting">{{message}}</span>',
                    '</form>'].join(),
         scope: {
           name: '='
         },
         controllerAs: 'vm',
-        controller: function($http, $scope){
+        controller: function($http, $scope, $timeout){
           this.sayHello = function(){
 
             $http.post('/greeting', { name: $scope.name })
-              .success(function(json){
+              .then(function(response){
+                var json = response.data;
                 $scope.message = json.greeting;
               });
+          },
+          this.sayGoodbye = function(){
+            $timeout(function(){
+                $scope.message = 'Goodbye ' + $scope.name + '!';    
+            }, 100);
           }
         },
         link: function(scope, element){
@@ -36,6 +43,7 @@ describe('sample test', function(){
   var click = testRunner.actions.click;
   var expect = testRunner.actions.expectElement;
   var keydown = testRunner.actions.keydown;
+  var wait = testRunner.actions.wait;
 
   beforeEach(function(){
 
@@ -77,7 +85,7 @@ describe('sample test', function(){
     // when:
     html.perform(
         type('Jane').in('input.name'),
-        click.in('button')
+        click.in('button#hello')
     );
     
     // then:
@@ -100,6 +108,44 @@ describe('sample test', function(){
     // then:
     html.verify(
         expect('.greeting').toContainText('Hello Jane!')
+    );
+
+  });
+
+  it('says goodbye async', function(done){
+      
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+        click.in('button#goodbye')
+    );
+
+    // then:
+    html.verify(
+        wait(200),
+        expect('.greeting').toContainText('Goodbye John!'),
+        done
+    );
+
+  });
+
+  it('says goodbye async (fluent version)', function(done){
+      
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+        click.in('button#goodbye'),
+        click.in('button#hello').after(200)
+    );
+
+    // then:
+    html.verify(
+        expect('.greeting').toContainText('Hello John!'),
+        done
     );
 
   });
