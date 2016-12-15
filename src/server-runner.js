@@ -43,6 +43,9 @@ function wrap(req){
     },
     sendJson: function(json){
       req.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(json));
+    },
+    sendError: function(status, json){
+      req.respond(status, {'Content-Type': 'application/json'}, JSON.stringify(json || {}));
     }
   };
 }
