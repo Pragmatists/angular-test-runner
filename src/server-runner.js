@@ -1,23 +1,31 @@
+var _ = require('lodash');
+
 module.exports = http;
 
-function http(){
+function http(config){
 
-  var server = sinon.fakeServer.create();
-  server.autoRespond = true;
-  server.respondImmediately = true;
-  
+  var defaultConfig = {
+          autoRespond: true,
+          respondImmediately: true
+      };
+
+  var server = sinon.fakeServer.create(_.defaults(config, defaultConfig));
+
   var that = {
     post: method('POST'),
     get: method('GET'),
     delete: method('DELETE'),
     put: method('PUT'),
+    respond: function(){
+      server.respond();
+    },
     stop: function(){
       server.restore();
     }
   };
-  
+
   return that;
-  
+
   function method(type){
     return function(url, handler){
       server.respondWith(type, url, function(req){
