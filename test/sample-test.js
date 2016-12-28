@@ -23,7 +23,7 @@ describe('sample test', function(){
           },
           this.sayGoodbye = function(){
             $timeout(function(){
-                $scope.message = 'Goodbye ' + $scope.name + '!';    
+                $scope.message = 'Goodbye ' + $scope.name + '!';
             }, 100);
           }
         },
@@ -63,35 +63,35 @@ describe('sample test', function(){
       });
     });
   });
-  
+
   it('populates name with default value', function(){
-    
+
     // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
-    
+
     // then:
     html.verify(
         expect('input.name').toHaveValue('John')
     );
-    
+
   });
 
   it('greets person', function(){
-    
+
     // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
-      
+
     // when:
     html.perform(
         type('Jane').in('input.name'),
         click.in('button#hello')
     );
-    
+
     // then:
     html.verify(
         expect('.greeting').toContainText('Hello Jane!')
     );
-    
+
   });
 
   it('greets person on enter', function(){
@@ -112,7 +112,7 @@ describe('sample test', function(){
   });
 
   it('says goodbye async', function(done){
-      
+
     // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
 
@@ -131,7 +131,7 @@ describe('sample test', function(){
   });
 
   it('says goodbye async (fluent version)', function(done){
-      
+
     // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
 

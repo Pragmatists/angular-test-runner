@@ -26886,26 +26886,40 @@ return jQuery;
 },{}],3:[function(require,module,exports){
 var jQuery = require('jquery');
 
+function assertSingle(fn){
+  var name = fn.name;
+  return function($el){
+    var found = $el.size();
+    if(found === 0){
+      throw new Error('Could not find ' + $el.selector + ' element for ' + name + ' action');
+    }
+    if(found > 1){
+      throw new Error('Found multiple ' + $el.selector + ' elements for ' + name + ' action');
+    }
+    return fn.apply(this, _.toArray(arguments));
+  };
+}
+
 function type(text) {
-    return withIn(function ($el) {
+    return withIn(assertSingle(function type($el) {
         $el.val(text);
         $el.change();
-    });
+    }));
 }
 function keypress(key) {
-    return withIn(function ($el) {
+    return withIn(assertSingle(function keypress($el) {
         $el.trigger(jQuery.Event('keypress', {keyCode : key, which : key}));
-    });
+    }));
 }
 function keydown(key) {
-    return withIn(function ($el) {
+    return withIn(assertSingle(function keydown($el) {
         $el.trigger(jQuery.Event('keydown', {keyCode : key, which : key}));
-    });
+    }));
 }
 function keyup(key) {
-    return withIn(function ($el) {
+    return withIn(assertSingle(function keyup($el) {
         $el.trigger(jQuery.Event('keyup', {keyCode : key, which : key}));
-    });
+    }));
 }
 function apply($el) {
     var scope = angular.element($el).scope();
@@ -26914,6 +26928,7 @@ function apply($el) {
 function click($el) {
     $el.click();
 }
+
 function wait(timeout) {
     return function(){
         return {
@@ -26960,7 +26975,6 @@ function withAfter(fn) {
     };
     return fn;
 }
-
 function expectElement(selector) {
 
     var perform = {
@@ -27007,7 +27021,7 @@ function expectElement(selector) {
 }
 
 module.exports = {
-    click : withIn(click),
+    click : withIn(assertSingle(click)),
     wait: wait,
     type : type,
     keypress : keypress,
