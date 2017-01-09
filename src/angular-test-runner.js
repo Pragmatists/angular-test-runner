@@ -2,7 +2,9 @@ var _ = require('lodash');
 
 module.exports = app;
 
-function app(modules){
+function app(modules, config){
+
+  config = _.defaults(config, {failOnUncaughtErrors : false});
 
   return {
     run: _.partial(run, _, _, true),
@@ -18,7 +20,7 @@ function app(modules){
       modulesToLoad = modulesToLoad.concat(html);
     }
     
-    angular.module('test-app', modulesToLoad)
+    var module = angular.module('test-app', modulesToLoad)
       .directive('testApp', function(){
         var d = {
           restrict: 'A'
@@ -33,6 +35,14 @@ function app(modules){
       .run(function($rootScope){
         _.assign($rootScope, scope);
       });
+    if(config.failOnUncaughtErrors) {
+      module
+        .factory('$exceptionHandler', function () {
+          return function failTest(error) {
+            fail(error);
+          };
+        });
+    }
 
     var compile, scope, actions = [];
 
