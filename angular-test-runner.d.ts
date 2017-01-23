@@ -1,6 +1,6 @@
 declare interface AngularTestRunner {
     app: (modules: string[]) => angularTestRunner.ITestRunnerApp;
-    http: (settings: angularTestRunner.ITestRunnerHttpSettings | void) => angularTestRunner.ITestRunnerHttp;
+    http: (settings?: angularTestRunner.ITestRunnerHttpSettings) => angularTestRunner.ITestRunnerHttp;
     actions: angularTestRunner.ITestRunnerActions;
 }
 
