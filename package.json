@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Test Angular stuff without ngMock",
   "main": "angular-test-runner.js",
+  "typings" : "angular-test-runner.d.ts",
   "scripts": {
     "test": "karma start karma.conf.js",
     "dist": "browserify src/export.js --standalone testRunner -o angular-test-runner.js"
