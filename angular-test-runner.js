@@ -26886,14 +26886,14 @@ return jQuery;
 },{}],3:[function(require,module,exports){
 var jQuery = require('jquery');
 
-function assertSingle(fn){
+function assertSingle(fn) {
   var name = fn.name;
-  return function($el){
+  return function ($el) {
     var found = $el.size();
-    if(found === 0){
+    if (found === 0) {
       throw new Error('Could not find ' + $el.selector + ' element for ' + name + ' action');
     }
-    if(found > 1){
+    if (found > 1) {
       throw new Error('Found multiple ' + $el.selector + ' elements for ' + name + ' action');
     }
     return fn.apply(this, _.toArray(arguments));
@@ -26901,135 +26901,135 @@ function assertSingle(fn){
 }
 
 function type(text) {
-    return withIn(assertSingle(function type($el) {
-        $el.val(text);
-        $el.change();
-    }));
+  return withIn(assertSingle(function type($el) {
+    $el.val(text);
+    $el.change();
+  }));
 }
 function keypress(key) {
-    return withIn(assertSingle(function keypress($el) {
-        $el.trigger(jQuery.Event('keypress', {keyCode : key, which : key}));
-    }));
+  return withIn(assertSingle(function keypress($el) {
+    $el.trigger(jQuery.Event('keypress', {keyCode: key, which: key}));
+  }));
 }
 function keydown(key) {
-    return withIn(assertSingle(function keydown($el) {
-        $el.trigger(jQuery.Event('keydown', {keyCode : key, which : key}));
-    }));
+  return withIn(assertSingle(function keydown($el) {
+    $el.trigger(jQuery.Event('keydown', {keyCode: key, which: key}));
+  }));
 }
 function keyup(key) {
-    return withIn(assertSingle(function keyup($el) {
-        $el.trigger(jQuery.Event('keyup', {keyCode : key, which : key}));
-    }));
+  return withIn(assertSingle(function keyup($el) {
+    $el.trigger(jQuery.Event('keyup', {keyCode: key, which: key}));
+  }));
 }
 function apply($el) {
-    var scope = angular.element($el).scope();
-    scope.$apply();
+  var scope = angular.element($el).scope();
+  scope.$apply();
 }
 function click($el) {
-    $el.click();
+  $el.click();
 }
 
 function wait(timeout) {
-    return function(){
-        return {
-            then: function(callback){
-                setTimeout(callback, timeout || 0);
-            }
-        };
+  return function () {
+    return {
+      then: function (callback) {
+        setTimeout(callback, timeout || 0);
+      }
     };
+  };
 }
 
-function navigateTo(url){
-    return withAfter(function($el){
-        angular
-            .element('<a href="' + url + '"></a>')
-            .appendTo($el)
-            .click()
-            .remove();
-    });
+function navigateTo(url) {
+  return withAfter(function ($el) {
+    angular
+      .element('<a href="' + url + '"></a>')
+      .appendTo($el)
+      .click()
+      .remove();
+  });
 }
 
 function withIn(fn) {
-    fn.in = function (selector) {
-        return withAfter(function ($el) {
-            fn($el.find(selector));
-        });
-    };
-    return withAfter(fn);
+  fn.in = function (selector) {
+    return withAfter(function ($el) {
+      fn($el.find(selector));
+    });
+  };
+  return withAfter(fn);
 }
 function withAfter(fn) {
-    fn.after = function (timeout) {
-        return function ($el) {
-            var callback = _.noop;
-            setTimeout(function(){
-                fn($el);
-                callback();
-            }, timeout);
-            
-            return {
-                then: function(cb){
-                    callback = cb;
-                }
-            }
-        };
+  fn.after = function (timeout) {
+    return function ($el) {
+      var callback = _.noop;
+      setTimeout(function () {
+        fn($el);
+        callback();
+      }, timeout);
+
+      return {
+        then: function (cb) {
+          callback = cb;
+        }
+      }
     };
-    return fn;
+  };
+  return fn;
 }
 function expectElement(selector) {
 
-    var perform = {
-        not : {}
-    };
+  var perform = {
+    not: {}
+  };
 
-    var jasmine = expect('');
+  var jasmine = expect('');
 
-    _(jasmine)
-        .map(function (fn, name) {
-            return {fn : fn, name : name};
-        })
-        .filter(function (fn) {
-            return fn.name.indexOf('to') === 0 && _.isFunction(fn.fn);
-        })
-        .forEach(function (fn) {
-            perform[fn.name] = function () {
-                var args = _.toArray(arguments);
-                return withAfter(function ($el) {
-                    var x = $el.find(selector);
-                    x.toString = function () {
-                        return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
-                    };
-                    var actual = expect(x);
-                    var matcher = actual[fn.name];
-                    var result = matcher.apply(actual, args);
-                });
-            };
-            perform.not[fn.name] = function () {
-                var args = _.toArray(arguments);
-                return withAfter(function ($el) {
-                    var x = $el.find(selector);
-                    x.toString = function () {
-                        return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
-                    };
-                    var actual = expect(x).not;
-                    var matcher = actual[fn.name];
-                    var result = matcher.apply(actual, args);
-                });
-            };
+  _(jasmine)
+    .map(function (fn, name) {
+      return {fn: fn, name: name};
+    })
+    .filter(function (fn) {
+      return fn.name.indexOf('to') === 0 && _.isFunction(fn.fn);
+    })
+    .forEach(function (fn) {
+      perform[fn.name] = function () {
+        var args = _.toArray(arguments);
+        return withAfter(function ($el) {
+          var x = $el.find(selector);
+          x.toString = function () {
+            return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
+          };
+          var actual = expect(x);
+          var matcher = actual[fn.name];
+          var result = matcher.apply(actual, args);
         });
+      };
+      perform.not[fn.name] = function () {
+        var args = _.toArray(arguments);
+        return withAfter(function ($el) {
+          var x = $el.find(selector);
+          x.toString = function () {
+            return '[\n\t' + (x[0] ? x[0].outerHTML : '(no elements matched)') + '\n]';
+          };
+          var actual = expect(x).not;
+          var matcher = actual[fn.name];
+          var result = matcher.apply(actual, args);
+        });
+      };
+    });
 
-    return perform;
+  return perform;
 }
 
 module.exports = {
-    click : withIn(assertSingle(click)),
-    wait: wait,
-    type : type,
-    keypress : keypress,
-    keyup : keyup,
-    keydown : keydown,
-    navigateTo: navigateTo,
-    apply : apply,
-    expectElement : expectElement
+  click: withIn(assertSingle(click)),
+  wait: wait,
+  type: type,
+  keypress: keypress,
+  keyup: keyup,
+  keydown: keydown,
+  navigateTo: navigateTo,
+  apply: apply,
+  expectElement: expectElement
 };
 
 
@@ -27038,80 +27038,86 @@ var _ = require('lodash');
 
 module.exports = app;
 
-function app(modules){
+function app(modules) {
 
   return {
     run: _.partial(run, _, _, true),
     runHtml: _.partial(run, _, _, false)
   };
-  
-  function run(html, scope, isUrl){
-    
+
+  function run(html, scope, isUrl) {
+
     var element = angular.element('<div ng-app="test-app"><div test-app/></div>');
 
     var modulesToLoad = modules;
-    if(isUrl){
+    if (isUrl) {
       modulesToLoad = modulesToLoad.concat(html);
     }
-    
+
     angular.module('test-app', modulesToLoad)
-      .directive('testApp', function(){
+      .directive('testApp', function () {
         var d = {
           restrict: 'A'
         };
-        if(isUrl){
+        if (isUrl) {
           d.templateUrl = html;
         } else {
           d.template = html;
         }
         return d;
       })
-      .run(function($rootScope){
+      .run(function ($rootScope) {
         _.assign($rootScope, scope);
       });
 
-    var compile, scope, actions = [];
+    var actions = [];
 
-    angular.bootstrap(element, [ 'test-app' ]);
-    
+    var injector = angular.bootstrap(element, ['test-app']);
+
     return {
       perform: perform,
-      verify: perform
+      verify: perform,
+      destroy: destroy
     };
 
-    function execute(){
+    function destroy() {
+      injector.get('$rootScope').$destroy();
+    }
+
+    function execute() {
       var action = actions.shift();
-    
-      if(!action){
+
+      if (!action) {
         var scope = angular.element(element).scope();
         scope.$apply();
         return;
       }
-        
+
       var result = action(element);
-      if(isPromise(result)){
-        result.then(execute);      
+      if (isPromise(result)) {
+        result.then(execute);
       } else {
         execute();
       }
     }
-      
-    function isPromise(promise){
+
+    function isPromise(promise) {
       return promise && typeof promise.then == 'function';
     }
-    function push(action){
-        actions.push(action);
+
+    function push(action) {
+      actions.push(action);
     }
-      
-    function perform(){
+
+    function perform() {
 
       var wasEmpty = !actions.length;
-        
+
       _([arguments])
         .flattenDeep()
         .each(push);
-        
-      if(wasEmpty){
+
+      if (wasEmpty) {
         execute();
       }
     }
@@ -27127,8 +27133,8 @@ var actions = require('./actions.js');
 
 module.exports = {
   app: app,
-  http : http,
-  actions : actions
+  http: http,
+  actions: actions
 };
 
 },{"./actions.js":3,"./angular-test-runner.js":4,"./server-runner.js":6}],6:[function(require,module,exports){
@@ -27136,12 +27142,12 @@ var _ = require('lodash');
 
 module.exports = http;
 
-function http(config){
+function http(config) {
 
   var defaultConfig = {
-          autoRespond: true,
-          respondImmediately: true
-      };
+    autoRespond: true,
+    respondImmediately: true
+  };
 
   var server = sinon.fakeServer.create(_.defaults(config, defaultConfig));
 
@@ -27150,19 +27156,19 @@ function http(config){
     get: method('GET'),
     delete: method('DELETE'),
     put: method('PUT'),
-    respond: function(){
+    respond: function () {
       server.respond();
     },
-    stop: function(){
+    stop: function () {
       server.restore();
     }
   };
 
   return that;
 
-  function method(type){
-    return function(url, handler){
-      server.respondWith(type, url, function(req){
+  function method(type) {
+    return function (url, handler) {
+      server.respondWith(type, url, function (req) {
         handler(wrap(req));
       });
       return that;
@@ -27170,15 +27176,15 @@ function http(config){
   }
 }
 
-function wrap(req){
+function wrap(req) {
   return {
-    body: function(){
+    body: function () {
       return JSON.parse(req.requestBody);
     },
-    sendJson: function(json){
+    sendJson: function (json) {
       req.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(json));
     },
-    sendStatus: function(status, json){
+    sendStatus: function (status, json) {
       req.respond(status, {'Content-Type': 'application/json'}, JSON.stringify(json || {}));
     }
   };

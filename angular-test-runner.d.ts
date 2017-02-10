@@ -21,6 +21,7 @@ declare namespace angularTestRunner {
   interface ITestHtml {
     perform: (...actions: IAction[]) => void;
     verify: (...actions: IVerificationAction[]) => void;
+    destroy: () => void;
   }
 
   interface IHttpRequest {

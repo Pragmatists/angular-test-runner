@@ -34,14 +34,19 @@ function app(modules) {
         _.assign($rootScope, scope);
       });
 
-    var compile, scope, actions = [];
+    var actions = [];
 
-    angular.bootstrap(element, ['test-app']);
+    var injector = angular.bootstrap(element, ['test-app']);
 
     return {
       perform: perform,
-      verify: perform
+      verify: perform,
+      destroy: destroy
     };
+
+    function destroy() {
+      injector.get('$rootScope').$destroy();
+    }
 
     function execute() {
       var action = actions.shift();
