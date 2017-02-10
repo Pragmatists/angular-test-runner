@@ -2,12 +2,12 @@ var _ = require('lodash');
 
 module.exports = http;
 
-function http(config){
+function http(config) {
 
   var defaultConfig = {
-          autoRespond: true,
-          respondImmediately: true
-      };
+    autoRespond: true,
+    respondImmediately: true
+  };
 
   var server = sinon.fakeServer.create(_.defaults(config, defaultConfig));
 
@@ -16,19 +16,19 @@ function http(config){
     get: method('GET'),
     delete: method('DELETE'),
     put: method('PUT'),
-    respond: function(){
+    respond: function () {
       server.respond();
     },
-    stop: function(){
+    stop: function () {
       server.restore();
     }
   };
 
   return that;
 
-  function method(type){
-    return function(url, handler){
-      server.respondWith(type, url, function(req){
+  function method(type) {
+    return function (url, handler) {
+      server.respondWith(type, url, function (req) {
         handler(wrap(req));
       });
       return that;
@@ -36,15 +36,15 @@ function http(config){
   }
 }
 
-function wrap(req){
+function wrap(req) {
   return {
-    body: function(){
+    body: function () {
       return JSON.parse(req.requestBody);
     },
-    sendJson: function(json){
+    sendJson: function (json) {
       req.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(json));
     },
-    sendStatus: function(status, json){
+    sendStatus: function (status, json) {
       req.respond(status, {'Content-Type': 'application/json'}, JSON.stringify(json || {}));
     }
   };

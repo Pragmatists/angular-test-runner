@@ -1,101 +1,101 @@
 describe('server', function () {
 
-    angular.module('async-server-app', [])
-        .directive('greeting', function () {
-            return {
-                template: ['<div class="greeting">{{ message }}</div>'].join(),
-                scope: {
-                    name: '='
-                },
-                controllerAs: 'vm',
-                controller: function ($http, $scope) {
-                    $scope.message = 'initial';
-                    $http.get('/greeting')
-                        .then(function (response) {
-                            var json = response.data;
-                            $scope.message = response.data.message;
-                        })
-                        .catch(function (response) {
-                            $scope.message = response.status;
-                        });
-                }
-            };
-        });
+  angular.module('async-server-app', [])
+    .directive('greeting', function () {
+      return {
+        template: ['<div class="greeting">{{ message }}</div>'].join(),
+        scope: {
+          name: '='
+        },
+        controllerAs: 'vm',
+        controller: function ($http, $scope) {
+          $scope.message = 'initial';
+          $http.get('/greeting')
+            .then(function (response) {
+              var json = response.data;
+              $scope.message = response.data.message;
+            })
+            .catch(function (response) {
+              $scope.message = response.status;
+            });
+        }
+      };
+    });
 
-    var server, app;
-    var expectElement = testRunner.actions.expectElement;
+  var server, app;
+  var expectElement = testRunner.actions.expectElement;
+
+  beforeEach(function () {
+    app = testRunner.app(['async-server-app']);
+  });
+
+
+  describe('when configured as async', function () {
 
     beforeEach(function () {
-        app = testRunner.app(['async-server-app']);
+      server = testRunner.http({respondImmediately: false});
     });
 
+    afterEach(function () {
+      server.stop();
+    });
 
-    describe('when configured as async', function () {
-
-        beforeEach(function () {
-            server = testRunner.http({respondImmediately: false});
+    beforeEach(function () {
+      server.get('/greeting', function (req) {
+        req.sendJson({
+          message: 'Hello from server!'
         });
+      });
+    });
 
-        afterEach(function () {
-            server.stop();
-        });
+    it('does not resolve request unless respond()', function () {
 
-        beforeEach(function () {
-            server.get('/greeting', function (req) {
-                req.sendJson({
-                    message: 'Hello from server!'
-                });
-            });
-        });
+      // given:
+      var html = app.runHtml('<greeting/>');
 
-        it('does not resolve request unless respond()', function () {
-
-            // given:
-            var html = app.runHtml('<greeting/>');
-
-            // then:
-            html.verify(
-                expectElement('.greeting').toHaveText('initial')
-            );
-
-        });
-
-        it('resolves request after respond()', function () {
-
-            // given:
-            var html = app.runHtml('<greeting/>');
-
-            // when:
-            html.perform(
-                server.respond
-            );
-
-            // then:
-            html.verify(
-                expectElement('.greeting').toHaveText('Hello from server!')
-            );
-
-        });
+      // then:
+      html.verify(
+        expectElement('.greeting').toHaveText('initial')
+      );
 
     });
 
-    it('responds with specific code', function () {
+    it('resolves request after respond()', function () {
 
-        // given:
-        server = testRunner.http();
-        server.get('/greeting', function (res) {
-            res.sendStatus(418);
-        });
+      // given:
+      var html = app.runHtml('<greeting/>');
 
-        // when:
-        var html = app.runHtml('<greeting/>');
+      // when:
+      html.perform(
+        server.respond
+      );
 
-        // then:
-        html.verify(
-            expectElement('.greeting').toHaveText('418')
-        );
+      // then:
+      html.verify(
+        expectElement('.greeting').toHaveText('Hello from server!')
+      );
 
     });
+
+  });
+
+  it('responds with specific code', function () {
+
+    // given:
+    server = testRunner.http();
+    server.get('/greeting', function (res) {
+      res.sendStatus(418);
+    });
+
+    // when:
+    var html = app.runHtml('<greeting/>');
+
+    // then:
+    html.verify(
+      expectElement('.greeting').toHaveText('418')
+    );
+
+  });
 
 
 });

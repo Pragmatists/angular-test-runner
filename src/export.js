@@ -4,6 +4,6 @@ var actions = require('./actions.js');
 
 module.exports = {
   app: app,
-  http : http,
-  actions : actions
+  http: http,
+  actions: actions
 };

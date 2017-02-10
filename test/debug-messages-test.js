@@ -1,11 +1,11 @@
-describe('debug messages test', function(){
+describe('debug messages test', function () {
 
   angular.module('debug-app', []);
 
   var app, html;
   var actions = testRunner.actions;
 
-  beforeEach(function(){
+  beforeEach(function () {
     app = testRunner.app(['debug-app']);
   });
 
@@ -17,14 +17,14 @@ describe('debug messages test', function(){
     keydown: actions.keydown(13)
   };
 
-  beforeEach(function(){
+  beforeEach(function () {
     // given:
     html = app.runHtml('<div><span class="ambiguous"></span><span class="ambiguous"></span></div>');
   });
-  
-  _(singleElementActions).each(function(action, name) {
-    
-    it('fails meaningfully if target for a "' + name + '" action cannot be find', function(){
+
+  _(singleElementActions).each(function (action, name) {
+
+    it('fails meaningfully if target for a "' + name + '" action cannot be find', function () {
 
       // when:
       try {
@@ -33,14 +33,14 @@ describe('debug messages test', function(){
         );
         fail('expected exception due to #missing not found');
 
-      } catch(e){
+      } catch (e) {
         // then:
         expect(e).toEqual(new Error('Could not find #missing element for ' + name + ' action'));
       }
 
     });
 
-    it('fails meaningfully if target for a "' + name + '" action is ambiguous', function(){
+    it('fails meaningfully if target for a "' + name + '" action is ambiguous', function () {
 
       // when:
       try {
@@ -49,13 +49,13 @@ describe('debug messages test', function(){
         );
         fail('expected exception due to multiple .ambiguous found');
 
-      } catch(e){
+      } catch (e) {
         // then:
         expect(e).toEqual(new Error('Found multiple .ambiguous elements for ' + name + ' action'));
       }
 
     });
-    
+
   });
-  
+
 });
