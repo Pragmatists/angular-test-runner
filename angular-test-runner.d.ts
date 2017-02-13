@@ -47,10 +47,10 @@ declare namespace angularTestRunner {
   type IAction = (JQuery) => any;
 
   interface IAfterAction {
-    after: (number) => IAction;
+    after?: (number) => IAction;
   }
 
-  type IVerificationAction = IAction | IAfterAction;
+  type IVerificationAction = IAction & IAfterAction;
 
   interface IInAction {
     in: (string) => IAction & IAfterAction;
