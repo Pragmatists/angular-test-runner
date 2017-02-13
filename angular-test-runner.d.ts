@@ -50,7 +50,7 @@ declare namespace angularTestRunner {
     after: (number) => IAction;
   }
 
-  type IVerificationAction = IAction & IAfterAction;
+  type IVerificationAction = IAction | IAfterAction;
 
   interface IInAction {
     in: (string) => IAction & IAfterAction;
