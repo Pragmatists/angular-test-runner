@@ -3,7 +3,7 @@ describe('server', function () {
   angular.module('async-server-app', [])
     .directive('greeting', function () {
       return {
-        template: ['<div class="greeting">{{ message }}</div>'].join(),
+        template: ['<div class="greeting">{{ message }}</div><a ng-click="vm.sendGreetings()">Send</a>'].join(),
         scope: {
           name: '='
         },
@@ -18,12 +18,17 @@ describe('server', function () {
             .catch(function (response) {
               $scope.message = response.status;
             });
+
+          this.sendGreetings = function() {
+            $http.post('/greeting?to=Jane%20Doe&when=now', {who: 'John'});
+          };
         }
       };
     });
 
   var server, app;
   var expectElement = testRunner.actions.expectElement;
+  var click = testRunner.actions.click;
 
   beforeEach(function () {
     app = testRunner.app(['async-server-app']);
@@ -97,6 +102,41 @@ describe('server', function () {
 
   });
 
+  it('provides request body', function () {
+    var requestedGreeting;
+    // given:
+    server = testRunner.http();
+    server.post(/\/greeting/, function (res) {
+      requestedGreeting = res.body();
+    });
+
+    // when:
+    var html = app.runHtml('<greeting/>');
+    html.perform(
+      click.in('a')
+    );
+
+    // then:
+    expect(requestedGreeting).toEqual({who: 'John'});
+  });
+
+  it('provides request params', function () {
+    var requestedParams;
+    // given:
+    server = testRunner.http();
+    server.post(/\/greeting/, function (res) {
+      requestedParams = res.query();
+    });
+
+    // when:
+    var html = app.runHtml('<greeting/>');
+    html.perform(
+      click.in('a')
+    );
+
+    // then:
+    expect(requestedParams).toEqual({to: 'Jane Doe', when:'now'});
+  });
 
 });
 

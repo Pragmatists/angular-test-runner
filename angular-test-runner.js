@@ -27181,6 +27181,15 @@ function wrap(req) {
     body: function () {
       return JSON.parse(req.requestBody);
     },
+    query: function () {
+      var query = req.url.split('#')[0].split('?')[1];
+      return _(query)
+        .split('&')
+        .map(_.partial(_.ary(_.split, 2), _, '='))
+        .fromPairs()
+        .mapValues(decodeURIComponent)
+        .value();
+    },
     sendJson: function (json) {
       req.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(json));
     },
