@@ -26,6 +26,7 @@ declare namespace angularTestRunner {
 
   interface IHttpRequest {
     body: () => any;
+    query: () => any;
     sendJson: (json: any) => void;
     sendStatus: (status: number, json?: any) => void
   }
