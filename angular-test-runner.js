@@ -27185,7 +27185,7 @@ function wrap(req) {
       var query = req.url.split('#')[0].split('?')[1];
       return _(query)
         .split('&')
-        .map(_.partial(_.ary(_.split, 2), _, '='))
+        .map(_.partial(_.split, _, '=', 2))
         .fromPairs()
         .mapValues(decodeURIComponent)
         .value();
