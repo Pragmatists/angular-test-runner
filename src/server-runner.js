@@ -50,6 +50,9 @@ function wrap(req) {
         .mapValues(decodeURIComponent)
         .value();
     },
+    header: function (name) {
+      return req.requestHeaders[name];
+    },
     sendJson: function (json) {
       req.respond(200, {'Content-Type': 'application/json'}, JSON.stringify(json));
     },

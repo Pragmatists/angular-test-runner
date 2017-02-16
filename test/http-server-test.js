@@ -19,8 +19,13 @@ describe('server', function () {
               $scope.message = response.status;
             });
 
-          this.sendGreetings = function() {
-            $http.post('/greeting?to=Jane%20Doe&when=now', {who: 'John'});
+          this.sendGreetings = function () {
+            $http.post('/greeting?to=Jane%20Doe&when=now', {who: 'John'},
+              {
+                headers: {
+                  'x-my-header': 'a-my-value'
+                }
+              });
           };
         }
       };
@@ -135,7 +140,25 @@ describe('server', function () {
     );
 
     // then:
-    expect(requestedParams).toEqual({to: 'Jane Doe', when:'now'});
+    expect(requestedParams).toEqual({to: 'Jane Doe', when: 'now'});
+  });
+
+  it('provides request headers', function () {
+    var myHeader;
+    // given:
+    server = testRunner.http();
+    server.post(/\/greeting/, function (req) {
+      myHeader = req.header('x-my-header');
+    });
+
+    // when:
+    var html = app.runHtml('<greeting/>');
+    html.perform(
+      click.in('a')
+    );
+
+    // then:
+    expect(myHeader).toEqual('a-my-value');
   });
 
 });
