@@ -67,6 +67,8 @@ declare namespace angularTestRunner {
     keydown: IKeyAction;
     keypress: IKeyAction;
     keyup: IKeyAction;
+    mouseover: IAction & IInAction;
+    mouseleave: IAction & IInAction;
     wait: (delay: number) => IAction;
     apply: IAction;
     navigateTo: (url: string) => IAction;

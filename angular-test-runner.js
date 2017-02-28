@@ -26921,6 +26921,12 @@ function keyup(key) {
     $el.trigger(jQuery.Event('keyup', {keyCode: key, which: key}));
   }));
 }
+function mouseover($el) {
+  $el.trigger(jQuery.Event('mouseover'));
+}
+function mouseleave($el) {
+  $el.trigger(jQuery.Event('mouseleave'));
+}
 function apply($el) {
   var scope = angular.element($el).scope();
   scope.$apply();
@@ -27027,6 +27033,8 @@ module.exports = {
   keypress: keypress,
   keyup: keyup,
   keydown: keydown,
+  mouseover: withIn(assertSingle(mouseover)),
+  mouseleave: withIn(assertSingle(mouseleave)),
   navigateTo: navigateTo,
   apply: apply,
   expectElement: expectElement

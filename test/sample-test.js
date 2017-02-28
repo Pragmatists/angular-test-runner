@@ -8,6 +8,7 @@ describe('sample test', function () {
           '<button id="hello" type="submit">Say Hello</button>',
           '<button id="goodbye" ng-click="vm.sayGoodbye()">Say Goodbye</button>',
           '<span class="greeting">{{message}}</span>',
+          '<span id="tickle-me" ng-mouseover="tickled = true" ng-mouseleave="tickled = false">{{tickled}}</span>',
           '</form>'].join(),
         scope: {
           name: '='
@@ -20,12 +21,12 @@ describe('sample test', function () {
                 var json = response.data;
                 $scope.message = json.greeting;
               });
-          },
-            this.sayGoodbye = function () {
-              $timeout(function () {
-                $scope.message = 'Goodbye ' + $scope.name + '!';
-              }, 100);
-            }
+          };
+          this.sayGoodbye = function () {
+            $timeout(function () {
+              $scope.message = 'Goodbye ' + $scope.name + '!';
+            }, 100);
+          }
         },
         link: function (scope, element) {
           element.find('input').on('keydown', function (ev) {
@@ -43,6 +44,8 @@ describe('sample test', function () {
   var expect = testRunner.actions.expectElement;
   var keydown = testRunner.actions.keydown;
   var wait = testRunner.actions.wait;
+  var mouseover = testRunner.actions.mouseover;
+  var mouseleave = testRunner.actions.mouseleave;
 
   beforeEach(function () {
 
@@ -146,6 +149,18 @@ describe('sample test', function () {
       expect('.greeting').toContainText('Hello John!'),
       done
     );
+
+  });
+
+  it('triggers mouseover and mouseleave', function () {
+
+    var html = app.runHtml('<greeting/>', {});
+
+    html.perform(mouseover.in('#tickle-me'));
+    html.verify(expect('#tickle-me').toContainText('true'));
+
+    html.perform(mouseleave.in('#tickle-me'));
+    html.verify(expect('#tickle-me').toContainText('false'));
 
   });
 
