@@ -72,7 +72,8 @@ declare namespace angularTestRunner {
     wait: (delay: number) => IAction;
     apply: IAction;
     navigateTo: (url: string) => IAction;
-    expectElement: (selector: string) => Matchers
+    expectElement: (selector: string) => Matchers;
+    listenTo: (eventName: string, handler: (data: any) => void) => IAction;
   }
 
   interface Matchers {

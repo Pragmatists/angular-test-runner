@@ -48,6 +48,13 @@ function apply($el) {
 function click($el) {
   $el.click();
 }
+function listenTo(event, handler) {
+  return function($el) {
+    angular.element($el).scope().$on(event, function($event, data) {
+      handler(data);
+    });
+  };
+}
 
 function wait(timeout) {
   return function () {
@@ -151,6 +158,7 @@ module.exports = {
   mouseleave: withIn(assertSingle(mouseleave)),
   navigateTo: navigateTo,
   apply: apply,
-  expectElement: expectElement
+  expectElement: expectElement,
+  listenTo: listenTo
 };
 
