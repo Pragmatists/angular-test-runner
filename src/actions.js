@@ -55,6 +55,11 @@ function listenTo(event, handler) {
     });
   };
 }
+function publishEvent(event, data) {
+  return function($el) {
+    angular.element($el).scope().$broadcast(event, data);
+  };
+}
 
 function wait(timeout) {
   return function () {
@@ -159,6 +164,7 @@ module.exports = {
   navigateTo: navigateTo,
   apply: apply,
   expectElement: expectElement,
-  listenTo: listenTo
+  listenTo: listenTo,
+  publishEvent: publishEvent
 };
 

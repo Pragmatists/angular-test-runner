@@ -15,7 +15,7 @@ describe('sample test', function () {
           name: '='
         },
         controllerAs: 'vm',
-        controller: function ($http, $scope, $timeout, $rootScope) {
+        controller: function ($http, $scope, $timeout) {
           this.sayHello = function () {
             $http.post('/greeting', {name: $scope.name})
               .then(function (response) {
@@ -29,8 +29,12 @@ describe('sample test', function () {
             }, 100);
           };
           this.publish = function() {
-            $rootScope.$broadcast('greeting', $scope.name);
+            $scope.$emit('greeting', $scope.name);
           };
+
+          $scope.$on('externalGreeting', function(event, greeting) {
+            $scope.message = greeting;
+          })
         },
         link: function (scope, element) {
           element.find('input').on('keydown', function (ev) {
@@ -51,6 +55,7 @@ describe('sample test', function () {
   var mouseover = testRunner.actions.mouseover;
   var mouseleave = testRunner.actions.mouseleave;
   var listenTo = testRunner.actions.listenTo;
+  var publishEvent = testRunner.actions.publishEvent;
 
   beforeEach(function () {
 
@@ -184,6 +189,22 @@ describe('sample test', function () {
 
     // then:
     expect(greeted).toEqual('John');
+  });
+
+  it('allows event publishing', function () {
+
+    // given:
+    var html = app.runHtml('<greeting/>', {});
+
+    // when:
+    html.perform(
+      publishEvent('externalGreeting', 'Hello, Jimmy!')
+    );
+
+    // then:
+    html.verify(
+      expectElement('.greeting').toContainText('Hello, Jimmy!')
+    );
   });
 
 
