@@ -33,7 +33,7 @@ declare namespace angularTestRunner {
   }
 
   type IHttpHandler = (request: IHttpRequest) => any;
-  type IHttpEndpoint = (url: string, handler: IHttpHandler) => any;
+  type IHttpEndpoint = (url: string | RegExp, handler: IHttpHandler) => any;
 
   interface ITestRunnerHttp {
 
@@ -74,7 +74,7 @@ declare namespace angularTestRunner {
     navigateTo: (url: string) => IAction;
     expectElement: (selector: string) => Matchers;
     listenTo: (eventName: string, handler: (data: any) => void) => IAction;
-    publishEvent: (eventName: string, data:any) => IAction;
+    publishEvent: (eventName: string, data: any) => IAction;
   }
 
   interface Matchers {
