@@ -78,3 +78,9 @@ where
 ```
 
 See more [examples](https://github.com/Pragmatists/angular-test-runner/blob/master/test/sample-test.js)
+
+## Features
+* readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Actions), e.g. clicking on elements, typing into inputs etc.
+* easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
+* simplified testing of code with [async operations](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
+* easy to [write asserts](https://github.com/Pragmatists/angular-test-runner/wiki/actions#expectelementelement) concerning html elements
