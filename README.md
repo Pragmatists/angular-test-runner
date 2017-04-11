@@ -8,7 +8,7 @@ To install it, type:
 
 ## Replacement for ngMock
 **angular-test-runner** was created as a replacement of "official" Angular testing library: **ngMock**. It was designed to address following shortcommings of **ngMock**:
-1. different style of testing for every component type (controller, directive, service, etc.),
+1. different style of testing for each component type (controller, directive, service, etc.),
 2. long and boilerplate-rich setup of test,
 3. difficult testing of html templates and no support for interacting with DOM elements,
 4. focusing on testing objects in isolation instead of testing coherent set of behaviours (white-box testing)
@@ -24,75 +24,76 @@ Therefore **angular-test-runner** tries to address those issues by:
 
 ## Example
 
-We have Angular component:
-
-```html
-<greeting>
-  <input class="name" type=text ng-model="name">
-  <button id="hello" ng-click="vm.sayHello()">Say Hello</button>
-  <span class="greeting">{{message}}</span>
-</greeting>
-```
-where 
-* sayHello method send POST http request with `Hello ${name}!` body
-* span element shows response body from that request. 
+Following example presents tests for simple counter component.
 
 ``` javascript
-  var server, app;
-  var type = testRunner.actions.type;
-  var click = testRunner.actions.click;
+var test = require('angular-test-runner');
+var { click, expectElement } = test.actions;
+
+describe('counter component', () => {
+
+  var app, server, html;
+
+  beforeEach(() => {
+    app = test.app(['counterApp']);
+    server = test.http();
+  });
+
+  beforeEach(() => {
+    html = app.runHtml('<counter value="start"></counter>', {start: 0});  
+  });
   
-  beforeEach(function () {
+  it('should render counter value', () => {
 
-      app = testRunner.app(['greeting-app']);
-      server = testRunner.http();
+    html.verify(
+      expectElement('#counter').toHaveText('0')
+    );
+    
   });
 
-  afterEach(function () {
-      server.stop();
+  it('should increment counter value by 1', () => {
+
+    html.perform(
+      click.in('button#increment')
+    );
+
+    html.verify(
+      expectElement('#counter').toHaveText('1')
+    );
   });
 
-  it('populates name with default value', function () {
+  it('should increment counter value by 1', () => {
 
-      // given:
-      var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+    var jsonSentToServer;
 
-      // then:
-      html.verify(
-        expectElement('input.name').toHaveValue('John')
-      );
+    server.post('/counter/increment', (req) => {
+      jsonSentToServer = req.body();
+      req.sendStatus(200);
+    });
+
+    html.perform(
+      click.in('button#increment')
+    );
+
+    html.verify(
+      () => expect(jsonSentToServer).toEqual({ counter: 1 })
+    );
   });
-
-  it('greets person', function () {
-
-      // given:
-      var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
-      server.post('/greeting', function(req) => {
-        var body = req.body();
-        req.sendJson({
-          greeting: 'Hello ' + body.name + '!'
-        });
-      });
-
-      // when:
-      html.perform(
-        type('Jane').in('input.name'),
-        click.in('button#hello')
-      );
-
-      // then:
-      html.verify(
-        expectElement('.greeting').toContainText('Hello Jane!')
-      );
-
-  });
-
+  
+});
 ```
+
+### Comparision to ngMock
+
+Below you can compare **angular-test-runner** style of testing to traditional **ngMock** way.
+Following example was taken from [Official Angular Developers Guide](https://docs.angularjs.org/guide/component#unit-testing-component-controllers):
+
+![ngMock vs angular-test-runner](http://pragmatists.pl/img/ngMock_vs_angular_test_runner.png)
 
 See more [examples](https://github.com/Pragmatists/angular-test-runner/blob/master/test/sample-test.js)
 
-
 ### Why not Protractor
+
 While **Protractor** is focused on end-to-end testing Angular application as a whole (from a browser perspective), 
 **angular-test-runner** focuses on testing coherent parts of application by excerising selected components in isolation. 
 
