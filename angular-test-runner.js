@@ -26941,12 +26941,17 @@ function listenTo(event, handler) {
     });
   };
 }
-function publishEvent(event, data) {
-  return function($el) {
-    angular.element($el).scope().$broadcast(event, data);
-  };
-}
+  function broadcastEvent(event, data) {
+    return function($el) {
+      angular.element($el).scope().$broadcast(event, data);
+    };
+  }
 
+  function emitEvent(event, data) {
+    return function($el) {
+      angular.element($el).scope().$emit(event, data);
+    };
+  }
 function wait(timeout) {
   return function () {
     return {
@@ -27051,7 +27056,8 @@ module.exports = {
   apply: apply,
   expectElement: expectElement,
   listenTo: listenTo,
-  publishEvent: publishEvent
+  broadcastEvent: broadcastEvent,
+  emitEvent: emitEvent
 };
 
 

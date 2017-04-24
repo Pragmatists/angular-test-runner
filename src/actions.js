@@ -55,9 +55,15 @@ function listenTo(event, handler) {
     });
   };
 }
-function publishEvent(event, data) {
+function broadcastEvent(event, data) {
   return function($el) {
     angular.element($el).scope().$broadcast(event, data);
+  };
+}
+
+function emitEvent(event, data) {
+  return function($el) {
+    angular.element($el).scope().$emit(event, data);
   };
 }
 
@@ -165,6 +171,7 @@ module.exports = {
   apply: apply,
   expectElement: expectElement,
   listenTo: listenTo,
-  publishEvent: publishEvent
+  broadcastEvent: broadcastEvent,
+  emitEvent: emitEvent
 };
 

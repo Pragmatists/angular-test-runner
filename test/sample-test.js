@@ -15,7 +15,7 @@ describe('sample test', function () {
           name: '='
         },
         controllerAs: 'vm',
-        controller: function ($http, $scope, $timeout) {
+        controller: function ($http, $scope, $timeout, $rootScope) {
           this.sayHello = function () {
             $http.post('/greeting', {name: $scope.name})
               .then(function (response) {
@@ -32,7 +32,11 @@ describe('sample test', function () {
             $scope.$emit('greeting', $scope.name);
           };
 
-          $scope.$on('externalGreeting', function(event, greeting) {
+          $scope.$on('broadcastedGreeting', function(event, greeting) {
+            $scope.message = greeting;
+          });
+
+          $rootScope.$on('emitedGreeting', function(event, greeting) {
             $scope.message = greeting;
           })
         },
@@ -55,7 +59,8 @@ describe('sample test', function () {
   var mouseover = testRunner.actions.mouseover;
   var mouseleave = testRunner.actions.mouseleave;
   var listenTo = testRunner.actions.listenTo;
-  var publishEvent = testRunner.actions.publishEvent;
+  var broadcastEvent = testRunner.actions.broadcastEvent;
+  var emitEvent = testRunner.actions.emitEvent;
 
   beforeEach(function () {
 
@@ -191,19 +196,35 @@ describe('sample test', function () {
     expect(greeted).toEqual('John');
   });
 
-  it('allows event publishing', function () {
+  it('allows to broadcast event', function () {
 
     // given:
     var html = app.runHtml('<greeting/>', {});
 
     // when:
     html.perform(
-      publishEvent('externalGreeting', 'Hello, Jimmy!')
+      broadcastEvent('broadcastedGreeting', 'Hello, Jimmy!')
     );
 
     // then:
     html.verify(
       expectElement('.greeting').toContainText('Hello, Jimmy!')
+    );
+  });
+
+  it('allows to emit event', function () {
+
+    // given:
+    var html = app.runHtml('<greeting/>', {});
+
+    // when:
+    html.perform(
+      emitEvent('emitedGreeting', 'Hello, Jonny!')
+    );
+
+    // then:
+    html.verify(
+      expectElement('.greeting').toContainText('Hello, Jonny!')
     );
   });
 
