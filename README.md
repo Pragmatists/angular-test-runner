@@ -1,5 +1,5 @@
 # angular-test-runner
-[![npm version](https://badge.fury.io/js/angular-test-runner.svg)](https://badge.fury.io/js/angular-test-runner)
+[![npm version](https://img.shields.io/npm/v/angular-test-runner.svg?style=flat-square)](https://www.npmjs.com/package/angular-test-runner)
 
 Micro testing library that allows you to practice TDD in Angular applications.
 
