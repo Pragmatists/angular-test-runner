@@ -19,10 +19,7 @@ module.exports = function(config) {
     
     plugins: ['karma-jasmine-jquery']
 
-    files: [
-      'node_modules/angular-test-runner/angular-test-runner.js',
-      '*.js'
-    ]
+    // ...
   })
 }
 ```
