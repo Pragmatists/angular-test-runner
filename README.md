@@ -8,6 +8,24 @@ To install it, type:
 
     $ npm install angular-test-runner --save-dev
 
+## Configuration
+`angular-test-runner` has depedency on [`jasmine-jquery`](https://github.com/bessdsv/karma-jasmine-jquery) and [`karma-jasmine-jquery`](https://github.com/bessdsv/karma-jasmine-jquery) so it is required to add it as well.
+
+```js
+// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    frameworks: ['jasmine-jquery', 'jasmine'],
+    
+    plugins: ['karma-jasmine-jquery']
+
+    files: [
+      'node_modules/angular-test-runner/angular-test-runner.js',
+      '*.js'
+    ]
+  })
+}
+```
 ## Replacement for ngMock
 **angular-test-runner** was created as a replacement of "official" Angular testing library: **ngMock**. It was designed to address following shortcommings of **ngMock**:
 1. different style of testing for each component type (controller, directive, service, etc.),
