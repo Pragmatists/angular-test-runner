@@ -100,7 +100,7 @@ While **Protractor** is focused on end-to-end testing Angular application as a w
 **angular-test-runner** focuses on testing coherent parts of application by excerising selected components in isolation. 
 
 ## Features
-* readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Actions), e.g. clicking on elements, typing into inputs etc.
-* easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
-* simplified testing of code with [async operations](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
-* easy to [write asserts](https://github.com/Pragmatists/angular-test-runner/wiki/actions#expectelementelement) concerning html elements
+* readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-DOM-interactions), e.g. clicking on elements, typing into inputs etc.
+* easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-HTTP-interactions)
+* simplified testing of code with [async operations](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-HTTP-interactions#async-mode)
+* easy to [write asserts](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-DOM-interactions#expectelementelement) concerning html elements
