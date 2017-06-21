@@ -1,4 +1,6 @@
 # angular-test-runner
+[![npm version](https://img.shields.io/npm/v/angular-test-runner.svg?style=flat-square)](https://www.npmjs.com/package/angular-test-runner)
+
 Micro testing library that allows you to practice TDD in Angular applications.
 
 ## Installation
@@ -6,6 +8,24 @@ To install it, type:
 
     $ npm install angular-test-runner --save-dev
 
+## Configuration
+`angular-test-runner` has depedency on [`jasmine-jquery`](https://github.com/bessdsv/karma-jasmine-jquery) and [`karma-jasmine-jquery`](https://github.com/bessdsv/karma-jasmine-jquery) so it is required to add it as well.
+
+```js
+// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    frameworks: ['jasmine-jquery', 'jasmine'],
+    
+    plugins: ['karma-jasmine-jquery']
+
+    files: [
+      'node_modules/angular-test-runner/angular-test-runner.js',
+      '*.js'
+    ]
+  })
+}
+```
 ## Replacement for ngMock
 **angular-test-runner** was created as a replacement of "official" Angular testing library: **ngMock**. It was designed to address following shortcommings of **ngMock**:
 1. different style of testing for each component type (controller, directive, service, etc.),
@@ -98,7 +118,7 @@ While **Protractor** is focused on end-to-end testing Angular application as a w
 **angular-test-runner** focuses on testing coherent parts of application by excerising selected components in isolation. 
 
 ## Features
-* readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Actions), e.g. clicking on elements, typing into inputs etc.
-* easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
-* simplified testing of code with [async operations](https://github.com/Pragmatists/angular-test-runner/wiki/Server)
-* easy to [write asserts](https://github.com/Pragmatists/angular-test-runner/wiki/actions#expectelementelement) concerning html elements
+* readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-DOM-interactions), e.g. clicking on elements, typing into inputs etc.
+* easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-HTTP-interactions)
+* simplified testing of code with [async operations](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-HTTP-interactions#async-mode)
+* easy to [write asserts](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-DOM-interactions#expectelementelement) concerning html elements
