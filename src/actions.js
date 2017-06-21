@@ -1,4 +1,5 @@
 var jQuery = require('jquery');
+var _ = require('lodash');
 
 function assertSingle(fn) {
   var name = fn.name;

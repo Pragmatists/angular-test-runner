@@ -1,6 +1,6 @@
 {
   "name": "angular-test-runner",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Test Angular stuff without ngMock",
   "main": "angular-test-runner.js",
   "typings": "angular-test-runner.d.ts",
@@ -9,13 +9,15 @@
     "dist": "browserify src/export.js --standalone testRunner -o angular-test-runner.js"
   },
   "dependencies": {
-    "angular": "1.6.0",
     "body-parser": "^1.4.3",
     "jquery": "^2.2.4",
     "lodash": "^4.13.1",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "karma-jasmine-jquery": "^0.1.1",
+    "jasmine-jquery": "^2.1.1"
   },
   "devDependencies": {
+    "angular": "1.6.0",
     "browserify": "^13.0.1",
     "jasmine-core": "^2.4.1",
     "jasmine-jquery": "^2.1.1",
@@ -23,7 +25,6 @@
     "karma-chrome-launcher": "^1.0.1",
     "karma-html2js-preprocessor": "^1.0.0",
     "karma-jasmine": "^1.0.2",
-    "karma-jasmine-jquery": "^0.1.1",
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sinon": "^1.0.5",

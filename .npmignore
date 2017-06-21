@@ -1,0 +1,12 @@
+.*
+*.tgz
+
+test
+
+# WebStorm
+.idea
+
+.gitignore
+.npmignore
+
+node_modules

@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var sinon = require('sinon');
 
 module.exports = http;
 
