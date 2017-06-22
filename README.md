@@ -114,6 +114,9 @@ See more [examples](https://github.com/Pragmatists/angular-test-runner/blob/mast
 While **Protractor** is focused on end-to-end testing Angular application as a whole (from a browser perspective), 
 **angular-test-runner** focuses on testing coherent parts of application by excerising selected components in isolation. 
 
+Unlike **Protractor** in **angular-test-runner** you don't have to start your backend server nor host your html files on localhost so it is accessible to Selenium. Therefore test runner setup and configuration is much more simple.  
+Moreover you are not forced to test entire pages at once, but you can exercise only a tiny fragments of your html (e.g. single directive, component or filter a.k.a. pipe). 
+
 ## Features
 * readable performing [actions](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-DOM-interactions), e.g. clicking on elements, typing into inputs etc.
 * easy request and response [server stubbing](https://github.com/Pragmatists/angular-test-runner/wiki/Testing-HTTP-interactions)
