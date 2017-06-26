@@ -1,9 +1,25 @@
 {
   "name": "angular-test-runner",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Test Angular stuff without ngMock",
   "main": "angular-test-runner.js",
   "typings": "angular-test-runner.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Pragmatists/angular-test-runner"
+  },
+  "bugs": {
+    "url": "https://github.com/Pragmatists/angular-test-runner/issues"
+  },
+  "keywords": [
+    "angular",
+    "js",
+    "javascript",
+    "testing",
+    "test",
+    "tdd"
+  ],
+  "license": "MIT",
   "scripts": {
     "test": "karma start karma.conf.js",
     "dist": "browserify src/export.js --standalone testRunner -o angular-test-runner.js"
