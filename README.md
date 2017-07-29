@@ -1,4 +1,6 @@
 # angular-test-runner
+
+[![Join the chat at https://gitter.im/angular-test-runner/Lobby](https://badges.gitter.im/angular-test-runner/Lobby.svg)](https://gitter.im/angular-test-runner/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://img.shields.io/npm/v/angular-test-runner.svg?style=flat-square)](https://www.npmjs.com/package/angular-test-runner)
 
 Micro testing library that allows you to practice TDD in Angular applications.
