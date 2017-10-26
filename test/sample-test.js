@@ -4,7 +4,7 @@ describe('sample test', function () {
     .directive('greeting', function () {
       return {
         template: ['<form ng-submit="vm.sayHello()">',
-          '<input class="name" type=text ng-model="name">',
+          '<input class="name" type=text ng-model="name" ng-blur="vm.sayGoodMorning()">',
           '<button id="hello" type="submit">Say Hello</button>',
           '<button id="goodbye" ng-click="vm.sayGoodbye()">Say Goodbye</button>',
           '<button id="publisher" ng-click="vm.publish()">Publish</button>',
@@ -31,7 +31,9 @@ describe('sample test', function () {
           this.publish = function() {
             $scope.$emit('greeting', $scope.name);
           };
-
+          this.sayGoodMorning = function () {
+            $scope.message = 'Good morning, ' + $scope.name + '!';
+          };
           $scope.$on('externalGreeting', function(event, greeting) {
             $scope.message = greeting;
           })
@@ -56,6 +58,7 @@ describe('sample test', function () {
   var mouseleave = testRunner.actions.mouseleave;
   var listenTo = testRunner.actions.listenTo;
   var publishEvent = testRunner.actions.publishEvent;
+  var blur = testRunner.actions.blur;
 
   beforeEach(function () {
 
@@ -204,6 +207,22 @@ describe('sample test', function () {
     // then:
     html.verify(
       expectElement('.greeting').toContainText('Hello, Jimmy!')
+    );
+  });
+
+  it('message when losing focus on input', function () {
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+      type('Jane').in('input.name'),
+      blur.from('input.name')
+    );
+
+    // then:
+    html.verify(
+      expectElement('.greeting').toContainText('Good morning, Jane!')
     );
   });
 

@@ -36,6 +36,9 @@ function keyup(key) {
     $el.trigger(jQuery.Event('keyup', {keyCode: key, which: key}));
   }));
 }
+function blur($el) {
+    $el.trigger(jQuery.Event('blur'));
+}
 function mouseover($el) {
   $el.trigger(jQuery.Event('mouseover'));
 }
@@ -83,12 +86,21 @@ function navigateTo(url) {
 }
 
 function withIn(fn) {
-  fn.in = function (selector) {
+  fn.in = selectWithAfter(fn);
+  return withAfter(fn);
+}
+
+function withFrom(fn) {
+  fn.from = selectWithAfter(fn);
+  return withAfter(fn);
+}
+
+function selectWithAfter(fn) {
+  return function (selector) {
     return withAfter(function ($el) {
       fn($el.find(selector));
     });
-  };
-  return withAfter(fn);
+  }
 }
 function withAfter(fn) {
   fn.after = function (timeout) {
@@ -162,6 +174,7 @@ module.exports = {
   keydown: keydown,
   mouseover: withIn(assertSingle(mouseover)),
   mouseleave: withIn(assertSingle(mouseleave)),
+  blur : withFrom(assertSingle(blur)),
   navigateTo: navigateTo,
   apply: apply,
   expectElement: expectElement,
