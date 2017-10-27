@@ -1,4 +1,17 @@
-## 0.1.1 (29.03.2017)
+## 0.0.5 (27.10.2017)
+
+### Blur action
+
+Now we can use blur action on element
+
+```typescript
+    html.perform(
+      blur.from('input.name')
+    );
+```
+
+
+## 0.0.1 (29.03.2017)
 
 ### Accept RegExp as http request url
 
