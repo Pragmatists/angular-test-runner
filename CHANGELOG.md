@@ -2,7 +2,7 @@
 
 ### Blur action
 
-Now use blur action on element
+Now we can use blur action on element
 
 ```typescript
     html.perform(
