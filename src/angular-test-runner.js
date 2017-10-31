@@ -2,16 +2,28 @@ var _ = require('lodash');
 
 module.exports = app;
 
-function app(modules) {
+function app(modules, config) {
+
+  const appClassname = 'ng-app';
+  const defaultConfig = {attachToDocument: false};
+  var appConfig = _.defaults(config, defaultConfig);
+  var body = angular.element(window.document.body);
 
   return {
     run: _.partial(run, _, _, true),
-    runHtml: _.partial(run, _, _, false)
+    runHtml: _.partial(run, _, _, false),
+    stop: stop
   };
+
+  function stop() {
+    if (appConfig.attachToDocument) {
+      body.find('.' + appClassname).remove();
+    }
+  }
 
   function run(html, scope, isUrl) {
 
-    var element = angular.element('<div ng-app="test-app"><div test-app/></div>');
+    var element = angular.element('<div class="' + appClassname + '" test-app></div>');
 
     var modulesToLoad = modules;
     if (isUrl) {
@@ -35,13 +47,21 @@ function app(modules) {
       });
 
     var actions = [];
-
     var injector = angular.bootstrap(element, ['test-app']);
+
+    attachApplicationToDocument();
+
+    function attachApplicationToDocument() {
+      if (appConfig.attachToDocument) {
+        body.append(element);
+      }
+    }
 
     return {
       perform: perform,
       verify: perform,
-      destroy: destroy
+      destroy: destroy,
+      stop: stop
     };
 
     function destroy() {
@@ -53,11 +73,13 @@ function app(modules) {
 
       if (!action) {
         var scope = angular.element(element).scope();
-        scope.$apply();
+        if (scope) {
+          scope.$apply();
+        }
         return;
       }
 
-      var result = action(element);
+      var result = action(appConfig.attachToDocument ? body : element);
       if (isPromise(result)) {
         result.then(execute);
       } else {

@@ -7,10 +7,14 @@ describe('sample test', function () {
           '<input class="name" type=text ng-model="name" ng-blur="vm.sayGoodMorning()">',
           '<button id="hello" type="submit">Say Hello</button>',
           '<button id="goodbye" ng-click="vm.sayGoodbye()">Say Goodbye</button>',
+          '<button id="extendInfo" ng-click="vm.extendInfo()">Extend info</button>',
+          '<button id="extendInfoOnBody" ng-click="vm.extendInfoOnBody()">Extend info on body</button>',
           '<button id="publisher" ng-click="vm.publish()">Publish</button>',
           '<span class="greeting">{{message}}</span>',
           '<span id="tickle-me" ng-mouseover="tickled = true" ng-mouseleave="tickled = false">{{tickled}}</span>',
-          '</form>'].join(),
+          '</form>',
+          '<div class="extended-info"></div>'
+        ].join(''),
         scope: {
           name: '='
         },
@@ -28,13 +32,21 @@ describe('sample test', function () {
               $scope.message = 'Goodbye ' + $scope.name + '!';
             }, 100);
           };
-          this.publish = function() {
+          this.publish = function () {
             $scope.$emit('greeting', $scope.name);
           };
           this.sayGoodMorning = function () {
             $scope.message = 'Good morning, ' + $scope.name + '!';
           };
-          $scope.$on('externalGreeting', function(event, greeting) {
+          this.extendInfo = function () {
+            var element = angular.element('.extended-info');
+            element.append('<div class="message">Good evening!</div>')
+          };
+          this.extendInfoOnBody = function () {
+            var body = angular.element(window.document.body);
+            body.append('<div class="message">Good morning!</div>')
+          };
+          $scope.$on('externalGreeting', function (event, greeting) {
             $scope.message = greeting;
           })
         },
@@ -62,12 +74,13 @@ describe('sample test', function () {
 
   beforeEach(function () {
 
-    app = testRunner.app(['greeting-app']);
+    app = testRunner.app(['greeting-app'], {attachToDocument : true});
     server = testRunner.http();
   });
 
   afterEach(function () {
     server.stop();
+    app.stop();
   });
 
   beforeEach(function () {
@@ -224,6 +237,38 @@ describe('sample test', function () {
     html.verify(
       expectElement('.greeting').toContainText('Good morning, Jane!')
     );
+  });
+
+  it('message when adding element to dom', function () {
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+      click.in('#extendInfo')
+    );
+
+    // then:
+    html.verify(
+      expectElement('.extended-info .message').toContainText('Good evening!')
+    );
+
+  });
+
+  it('message when adding element to dom directly in body', function () {
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+      click.in('#extendInfoOnBody')
+    );
+
+    // then:
+    html.verify(
+      expectElement('.message').toContainText('Good morning!')
+    );
+
   });
 
 

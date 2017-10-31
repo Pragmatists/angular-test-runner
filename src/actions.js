@@ -21,48 +21,76 @@ function type(text) {
     $el.change();
   }));
 }
+
 function keypress(key) {
   return withIn(assertSingle(function keypress($el) {
     $el.trigger(jQuery.Event('keypress', {keyCode: key, which: key}));
   }));
 }
+
 function keydown(key) {
   return withIn(assertSingle(function keydown($el) {
     $el.trigger(jQuery.Event('keydown', {keyCode: key, which: key}));
   }));
 }
+
 function keyup(key) {
   return withIn(assertSingle(function keyup($el) {
     $el.trigger(jQuery.Event('keyup', {keyCode: key, which: key}));
   }));
 }
+
 function blur($el) {
-    $el.trigger(jQuery.Event('blur'));
+  $el.trigger(jQuery.Event('blur'));
 }
+
 function mouseover($el) {
   $el.trigger(jQuery.Event('mouseover'));
 }
+
 function mouseleave($el) {
   $el.trigger(jQuery.Event('mouseleave'));
 }
+
 function apply($el) {
   var scope = angular.element($el).scope();
   scope.$apply();
 }
+
 function click($el) {
   $el.click();
 }
+
 function listenTo(event, handler) {
-  return function($el) {
-    angular.element($el).scope().$on(event, function($event, data) {
+  return function ($el) {
+    findScope($el).$on(event, function ($event, data) {
       handler(data);
     });
   };
 }
+
 function publishEvent(event, data) {
-  return function($el) {
-    angular.element($el).scope().$broadcast(event, data);
+  return function ($el) {
+    findScope($el).$broadcast(event, data);
   };
+}
+
+function findScope(el) {
+  if (scopeFor(el)) {
+    return scopeFor(el);
+  }
+  var children = el.children();
+  for (var i = 0; i < children.length; i++) {
+    var scope = scopeFor(children[i]);
+    if (scope) {
+      return scope;
+    }
+  }
+  throw new Error('Cannot find scope on top level children of root element', el);
+
+  function scopeFor(element) {
+    return angular.element(element).scope();
+  }
 }
 
 function wait(timeout) {
@@ -102,6 +130,7 @@ function selectWithAfter(fn) {
     });
   }
 }
+
 function withAfter(fn) {
   fn.after = function (timeout) {
     return function ($el) {
@@ -120,6 +149,7 @@ function withAfter(fn) {
   };
   return fn;
 }
+
 function expectElement(selector) {
 
   var perform = {
@@ -174,7 +204,7 @@ module.exports = {
   keydown: keydown,
   mouseover: withIn(assertSingle(mouseover)),
   mouseleave: withIn(assertSingle(mouseleave)),
-  blur : withFrom(assertSingle(blur)),
+  blur: withFrom(assertSingle(blur)),
   navigateTo: navigateTo,
   apply: apply,
   expectElement: expectElement,

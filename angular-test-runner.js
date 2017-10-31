@@ -34209,48 +34209,76 @@ function type(text) {
     $el.change();
   }));
 }
+
 function keypress(key) {
   return withIn(assertSingle(function keypress($el) {
     $el.trigger(jQuery.Event('keypress', {keyCode: key, which: key}));
   }));
 }
+
 function keydown(key) {
   return withIn(assertSingle(function keydown($el) {
     $el.trigger(jQuery.Event('keydown', {keyCode: key, which: key}));
   }));
 }
+
 function keyup(key) {
   return withIn(assertSingle(function keyup($el) {
     $el.trigger(jQuery.Event('keyup', {keyCode: key, which: key}));
   }));
 }
+
 function blur($el) {
-    $el.trigger(jQuery.Event('blur'));
+  $el.trigger(jQuery.Event('blur'));
 }
+
 function mouseover($el) {
   $el.trigger(jQuery.Event('mouseover'));
 }
+
 function mouseleave($el) {
   $el.trigger(jQuery.Event('mouseleave'));
 }
+
 function apply($el) {
   var scope = angular.element($el).scope();
   scope.$apply();
 }
+
 function click($el) {
   $el.click();
 }
+
 function listenTo(event, handler) {
-  return function($el) {
-    angular.element($el).scope().$on(event, function($event, data) {
+  return function ($el) {
+    findScope($el).$on(event, function ($event, data) {
       handler(data);
     });
   };
 }
+
 function publishEvent(event, data) {
-  return function($el) {
-    angular.element($el).scope().$broadcast(event, data);
+  return function ($el) {
+    findScope($el).$broadcast(event, data);
   };
+}
+
+function findScope(el) {
+  if (scopeFor(el)) {
+    return scopeFor(el);
+  }
+  var children = el.children();
+  for (var i = 0; i < children.length; i++) {
+    var scope = scopeFor(children[i]);
+    if (scope) {
+      return scope;
+    }
+  }
+  throw new Error('Cannot find scope on top level children of root element', el);
+
+  function scopeFor(element) {
+    return angular.element(element).scope();
+  }
 }
 
 function wait(timeout) {
@@ -34290,6 +34318,7 @@ function selectWithAfter(fn) {
     });
   }
 }
+
 function withAfter(fn) {
   fn.after = function (timeout) {
     return function ($el) {
@@ -34308,6 +34337,7 @@ function withAfter(fn) {
   };
   return fn;
 }
+
 function expectElement(selector) {
 
   var perform = {
@@ -34362,7 +34392,7 @@ module.exports = {
   keydown: keydown,
   mouseover: withIn(assertSingle(mouseover)),
   mouseleave: withIn(assertSingle(mouseleave)),
-  blur : withFrom(assertSingle(blur)),
+  blur: withFrom(assertSingle(blur)),
   navigateTo: navigateTo,
   apply: apply,
   expectElement: expectElement,
@@ -34376,16 +34406,28 @@ var _ = require('lodash');
 
 module.exports = app;
 
-function app(modules) {
+function app(modules, config) {
+
+  const appTestName = 'test-app';
+  const defaultConfig = {attachToDocument: false};
+  var appConfig = _.defaults(config, defaultConfig);
+  var body = angular.element(window.document.body);
 
   return {
     run: _.partial(run, _, _, true),
-    runHtml: _.partial(run, _, _, false)
+    runHtml: _.partial(run, _, _, false),
+    stop: stop
   };
+
+  function stop() {
+    if (appConfig.attachToDocument) {
+      body.find('.ng-app').remove();
+    }
+  }
 
   function run(html, scope, isUrl) {
 
-    var element = angular.element('<div ng-app="test-app"><div test-app/></div>');
+    var element = angular.element('<div class="ng-app" test-app></div>');
 
     var modulesToLoad = modules;
     if (isUrl) {
@@ -34409,13 +34451,21 @@ function app(modules) {
       });
 
     var actions = [];
-
     var injector = angular.bootstrap(element, ['test-app']);
+
+    attachApplicationToDocument();
+
+    function attachApplicationToDocument() {
+      if (appConfig.attachToDocument) {
+        body.append(element);
+      }
+    }
 
     return {
       perform: perform,
       verify: perform,
-      destroy: destroy
+      destroy: destroy,
+      stop: stop
     };
 
     function destroy() {
@@ -34427,11 +34477,13 @@ function app(modules) {
 
       if (!action) {
         var scope = angular.element(element).scope();
-        scope.$apply();
+        if (scope) {
+          scope.$apply();
+        }
         return;
       }
 
-      var result = action(element);
+      var result = action(appConfig.attachToDocument ? body : element);
       if (isPromise(result)) {
         result.then(execute);
       } else {
