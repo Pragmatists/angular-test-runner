@@ -1,6 +1,6 @@
 {
   "name": "angular-test-runner",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Test Angular stuff without ngMock",
   "main": "angular-test-runner.js",
   "typings": "angular-test-runner.d.ts",

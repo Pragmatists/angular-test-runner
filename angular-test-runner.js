@@ -34408,7 +34408,7 @@ module.exports = app;
 
 function app(modules, config) {
 
-  const appTestName = 'test-app';
+  const appClassname = 'ng-app';
   const defaultConfig = {attachToDocument: false};
   var appConfig = _.defaults(config, defaultConfig);
   var body = angular.element(window.document.body);
@@ -34421,13 +34421,13 @@ function app(modules, config) {
 
   function stop() {
     if (appConfig.attachToDocument) {
-      body.find('.ng-app').remove();
+      body.find('.' + appClassname).remove();
     }
   }
 
   function run(html, scope, isUrl) {
 
-    var element = angular.element('<div class="ng-app" test-app></div>');
+    var element = angular.element('<div class="' + appClassname + '" test-app></div>');
 
     var modulesToLoad = modules;
     if (isUrl) {
