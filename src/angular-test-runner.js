@@ -8,6 +8,7 @@ function app(modules, config) {
   const defaultConfig = {attachToDocument: false};
   var appConfig = _.defaults(config, defaultConfig);
   var body = angular.element(window.document.body);
+  var initialBody;
 
   return {
     run: _.partial(run, _, _, true),
@@ -17,7 +18,27 @@ function app(modules, config) {
 
   function stop() {
     if (appConfig.attachToDocument) {
+      var children = body.children();
+      console.log(initialBody);
+      // for (var i = 0; i < children.length; i++) {
+      //   console.log('contains: ', containsInInitialBody(children[i]))
+      // }
+      // body.replaceWith(initialBody)
+      // window.document.body = initialBody;
       body.find('.' + appClassname).remove();
+
+    }
+
+    function containsInInitialBody(el) {
+      var children = initialBody.children();
+      console.log('\n\n---Szukam elementu----\n\n: ', el)
+      for (var i = 0; i < children.length; i++) {
+        console.log('initialElement: ', children[i])
+        if (el === children[i]) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 
@@ -51,18 +72,19 @@ function app(modules, config) {
 
     attachApplicationToDocument();
 
-    function attachApplicationToDocument() {
-      if (appConfig.attachToDocument) {
-        body.append(element);
-      }
-    }
-
     return {
       perform: perform,
       verify: perform,
       destroy: destroy,
       stop: stop
     };
+
+    function attachApplicationToDocument() {
+      if (appConfig.attachToDocument) {
+        initialBody = _.cloneDeep(body);
+        body.append(element);
+      }
+    }
 
     function destroy() {
       injector.get('$rootScope').$destroy();
