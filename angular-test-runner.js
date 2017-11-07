@@ -34421,7 +34421,13 @@ function app(modules, config) {
 
   function stop() {
     if (appConfig.attachToDocument) {
-      body.find('.' + appClassname).remove();
+      var children = body.children();
+      for (var i = 0; i < children.length; i++) {
+        var element = angular.element(children[i])[0];
+        if (element.tagName !== 'SCRIPT') {
+          element.remove();
+        }
+      }
     }
   }
 
@@ -34455,18 +34461,18 @@ function app(modules, config) {
 
     attachApplicationToDocument();
 
-    function attachApplicationToDocument() {
-      if (appConfig.attachToDocument) {
-        body.append(element);
-      }
-    }
-
     return {
       perform: perform,
       verify: perform,
       destroy: destroy,
       stop: stop
     };
+
+    function attachApplicationToDocument() {
+      if (appConfig.attachToDocument) {
+        body.append(element);
+      }
+    }
 
     function destroy() {
       injector.get('$rootScope').$destroy();
