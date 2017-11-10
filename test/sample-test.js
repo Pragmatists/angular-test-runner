@@ -74,7 +74,7 @@ describe('sample test', function () {
 
   beforeEach(function () {
 
-    app = testRunner.app(['greeting-app'], {attachToDocument : true});
+    app = testRunner.app(['greeting-app'], {attachToDocument: true});
     server = testRunner.http();
   });
 
@@ -271,5 +271,21 @@ describe('sample test', function () {
 
   });
 
+  it('last action in perform block was called', function (done) {
+    // given:
+    var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
+
+    // when:
+    html.perform(
+      click.in('button#goodbye'),
+      wait(200)
+    );
+
+    // then:
+    html.verify(
+      expectElement('.greeting').toContainText('Goodbye John!'),
+      done
+    );
+  });
 
 });

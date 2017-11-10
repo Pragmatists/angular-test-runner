@@ -34473,21 +34473,35 @@ function app(modules, config) {
     }
 
     function execute() {
-      var action = actions.shift();
-
-      if (!action) {
-        var scope = angular.element(element).scope();
-        if (scope) {
-          scope.$apply();
-        }
+      var action = takeNextAction();
+      if (lastAction()) {
+        doScopeApply();
         return;
       }
-
-      var result = action(appConfig.attachToDocument ? body : element);
+      var result = executeAction();
       if (isPromise(result)) {
         result.then(execute);
       } else {
         execute();
+      }
+
+      function doScopeApply() {
+        var scope = angular.element(element).scope();
+        if (scope) {
+          scope.$apply();
+        }
+      }
+
+      function executeAction() {
+        return action(appConfig.attachToDocument ? body : element);
+      }
+
+      function lastAction() {
+        return !action;
+      }
+
+      function takeNextAction() {
+        return actions.shift();
       }
     }
 
@@ -34504,12 +34518,15 @@ function app(modules, config) {
       var wasEmpty = !actions.length;
 
       _([arguments])
+        .union([emptyAction])
         .flattenDeep()
         .each(push);
 
       if (wasEmpty) {
         execute();
       }
+
+      function emptyAction() {}
     }
   }
 
