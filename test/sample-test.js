@@ -240,15 +240,12 @@ describe('sample test', function () {
   });
 
   it('message when adding element to dom', function () {
-    // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
 
-    // when:
     html.perform(
       click.in('#extendInfo')
     );
 
-    // then:
     html.verify(
       expectElement('.extended-info .message').toContainText('Good evening!')
     );
@@ -256,15 +253,12 @@ describe('sample test', function () {
   });
 
   it('message when adding element to dom directly in body', function () {
-    // given:
     var html = app.runHtml('<greeting name="defaultName"/>', {defaultName: 'John'});
 
-    // when:
     html.perform(
       click.in('#extendInfoOnBody')
     );
 
-    // then:
     html.verify(
       expectElement('.message').toContainText('Good morning!')
     );
