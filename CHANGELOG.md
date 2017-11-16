@@ -1,3 +1,16 @@
+## 0.1.2 (16.11.2017)
+
+### Wait as a last action in `perform` block
+
+We've fixed bug and now you can use `wait` operator as a last action in `perform` block
+
+```typescript
+    html.perform(
+      click.in('.my-element'),
+      wait(200)
+    );
+```
+
 ## 0.1.0 (31.10.2017)
 
 ### Attach to DOM
