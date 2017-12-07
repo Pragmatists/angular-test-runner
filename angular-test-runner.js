@@ -34420,13 +34420,11 @@ function app(modules, config) {
   };
 
   function stop() {
-    if (appConfig.attachToDocument) {
-      var children = body.children();
-      for (var i = 0; i < children.length; i++) {
-        var element = angular.element(children[i])[0];
-        if (element.tagName !== 'SCRIPT') {
-          element.remove();
-        }
+    var children = body.children();
+    for (var i = 0; i < children.length; i++) {
+      var element = angular.element(children[i])[0];
+      if (element.tagName !== 'SCRIPT') {
+        element.remove();
       }
     }
   }
@@ -34532,7 +34530,8 @@ function app(modules, config) {
         execute();
       }
 
-      function emptyAction() {}
+      function emptyAction() {
+      }
     }
   }
 

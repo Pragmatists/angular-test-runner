@@ -7,7 +7,7 @@ declare interface AngularTestRunner {
 declare namespace angularTestRunner {
 
   interface ITestRunnerApp {
-
+    stop: () => void;
     runHtml: (html: string, scope?: any) => ITestHtml;
     run: (location: string, scope?: any) => ITestHtml;
   }

@@ -1,3 +1,7 @@
+## 0.1.5 (7.12.2017)
+
+### Allow to call `app.stop()` method without `attachToDocument: true`.
+
 ## 0.1.3 (16.11.2017)
 
 ### Wait as a last action in `perform` block
